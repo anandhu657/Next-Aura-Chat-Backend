@@ -38,4 +38,11 @@ export default defineConfig([
       '@typescript-eslint/no-explicit-any': 'error',
     },
   },
+  {
+    ignores: [
+      'dist/**', // Ignore build output
+      'node_modules/**',
+      '*.config.js', // Optional: ignore config files
+    ],
+  },
 ]);

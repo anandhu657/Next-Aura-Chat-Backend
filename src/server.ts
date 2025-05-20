@@ -3,8 +3,12 @@ import dotenv from 'dotenv';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
 import { connectDB } from './config/db/mongoose';
+import swaggerSpec from './docs/swagger';
 import { errorHandler } from './middlewares/errorHandler';
+import { notFound } from './middlewares/notFound';
+import userRoutes from './routes/user.routes';
 import logger from './utils/logger';
 
 dotenv.config(); // Load environment variables from .env file
@@ -37,6 +41,15 @@ app.use(express.static('public')); // Serve static files from the 'public' direc
 
 // Connect to MongoDB
 connectDB();
+
+// Swagger Docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Routes
+app.use('/api/user', userRoutes);
+
+// Handle unmatched routes
+app.use(notFound);
 
 // Global error handler
 app.use(errorHandler);
